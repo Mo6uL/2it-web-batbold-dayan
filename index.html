@@ -1,69 +1,174 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Alexander the Great</title>
-    <meta name="description" content="A modern one-page presentation of Alexander the Great.">
-
+    <meta name="description" content="A premium interactive presentation of Alexander the Great.">
+    <meta property="og:title" content="Alexander the Great">
+    <meta property="og:description" content="Explore the life of the greatest conqueror in history.">
+    <meta property="og:image" content="alexander1.webp">
+    <meta property="twitter:card" content="summary_large_image">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 </head>
+
 <body>
-
-    <section class="hero">
-        <h1>Alexandr Veliký</h1>
-    </section>
-
-    <section class="content">
-        <div class="info-layout">
-
-            <div class="text">
-                <h2>O Alexandrovi Velikém</h2>
-                <p>
-        Alexandr III. Makedonský, známý jako Alexandr Veliký, byl jedním
-        z nejúspěšnějších vojevůdců v dějinách. Již ve velmi mladém věku
-        dokázal vybudovat jednu z největších říší starověkého světa.
-                </p>
-
-                <p>
-        Jeho výboje sahaly od Řecka přes Persii až do Indie a zásadně
-        ovlivnily vývoj evropské i asijské civilizace. Alexandr usiloval
-        o propojení různých kultur a šíření řeckého jazyka, vzdělanosti
-        a myšlenek.
-                </p>
-
+    <nav class="controls">
+        <div class="control-group">
+            <button class="btn-control" onclick="setLanguage('en')" title="English">EN</button>
+            <button class="btn-control" onclick="setLanguage('cs')" title="Čeština">CS</button>
+            <button class="btn-control" onclick="setLanguage('mn')" title="Mongolian">MN</button>
+        </div>
+        <div class="control-group">
+            <button class="btn-control" onclick="setTheme('dark')" title="Dark Mode">🌑</button>
+            <button class="btn-control" onclick="setTheme('light')" title="Light Mode">☀️</button>
+            <button class="btn-control" onclick="setTheme('night')" title="Night Light">🕯️</button>
+        </div>
+        <div class="control-group">
+            <button class="btn-control" id="audio-btn" onclick="toggleAudio()" title="Play Speech">🔊 Speech</button>
+        </div>
+    </nav>
+    <img id="spinner" src="spinner_head.png" alt="Spinning Head">
+    <audio id="bg-audio" loop>
+        <source src="speech.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <section class="hero" id="hero">
+        <div id="canvas-container"></div>
+        <div class="hero-overlay">
+            <div id="moveable-title" class="title-container">
+                <span data-i18n="hero_title_1">Alexander</span>
+                <div class="title-img-wrapper">
+                    <img src="title_statue.png" alt="Macedonia Statue" class="title-img">
+                </div>
+                <span data-i18n="hero_title_2">The Great</span>
             </div>
-
-            <div class="image-box">
-                <img id="swapImage"
-                     src="alexander2.webp"
-                     alt="Alexander the Great portrait">
-                <p class="hint">Click ↑</p>
+            <p class="hero-subtitle" data-i18n="hero_subtitle">The King of Kings</p>
+            <div class="scroll-indicator">
+                <span data-i18n="scroll_hint">Scroll to Explore</span>
+                <div class="arrow">↓</div>
             </div>
-
         </div>
     </section>
-    <section id="timeline" class="timeline">
-    <h2>Život a výboje</h2>
-    <ul>
-        <li><strong>356 př. n. l.</strong> – Narození v Pelle</li>
-        <li><strong>336 př. n. l.</strong> – Stal se králem Makedonie</li>
-        <li><strong>334–323 př. n. l.</strong> – Perské tažení</li>
-    </ul>
-</section>
-
-
+    <section class="content">
+        <div class="info-layout">
+            <div class="text fade-in">
+                <h2 data-i18n="about_title">About Alexander</h2>
+                <p data-i18n="about_p1">
+                    Alexander III of Macedon, commonly known as Alexander the Great, was a king of the ancient Greek
+                    kingdom of Macedon and a member of the Argead dynasty. He was born in Pella in 356 BC and succeeded
+                    his father Philip II to the throne at the age of 20.
+                </p>
+                <p data-i18n="about_p2">
+                    He spent most of his ruling years on an unprecedented series of military campaigns through Asia and
+                    northeast Africa, and by the age of thirty, he had created one of the largest empires of the ancient
+                    world, stretching from Greece to northwestern India.
+                </p>
+                <blockquote class="quote-box">
+                    "I am indebted to my father for living, but to my teacher for living well."
+                    <footer>— Alexander the Great</footer>
+                </blockquote>
+            </div>
+            <div class="image-box fade-in">
+                <div class="img-wrapper">
+                    <img id="swapImage" src="alexander2.webp" alt="Alexander the Great portrait">
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="stats-section">
+        <div class="stat-box">
+            <h3 class="stat-number" data-target="4">0</h3>
+            <p data-i18n="stat_battles">Major Battles</p>
+        </div>
+        <div class="stat-box">
+            <h3 class="stat-number color-win" data-target="20">0</h3>
+            <p data-i18n="stat_wins">Wins</p>
+        </div>
+        <div class="stat-box">
+            <h3 class="stat-number color-loss" data-target="0">0</h3>
+            <p data-i18n="stat_losses">Defeats</p>
+        </div>
+        <div class="stat-info fade-in">
+            <p data-i18n="stat_info">Undefeated in battle, Alexander’s military genius lay in his ability to adapt
+                strategy to any terrain or enemy.</p>
+        </div>
+    </section>
+    <section id="timeline-section" class="horizontal-scroll">
+        <div class="scroll-container">
+            <div class="scroll-intro">
+                <h2 data-i18n="timeline_title">Life & Conquests</h2>
+            </div>
+            <div class="timeline-card">
+                <span class="year">356 BC</span>
+                <h3 data-i18n="event_1_title">The Birth</h3>
+                <p data-i18n="event_1_desc">Born in Pella to King Philip II and Olympias. Tutored by Aristotle.</p>
+            </div>
+            <div class="timeline-card">
+                <span class="year">336 BC</span>
+                <h3 data-i18n="event_2_title">The King</h3>
+                <p data-i18n="event_2_desc">Ascends to the throne after his father's assassination. Secures Greece.</p>
+            </div>
+            <div class="timeline-card">
+                <span class="year">334 BC</span>
+                <h3 data-i18n="event_3_title">The Invasion</h3>
+                <p data-i18n="event_3_desc">Crosses into Asia. Wins Battle of the Granicus against Persia.</p>
+            </div>
+            <div class="timeline-card">
+                <span class="year">331 BC</span>
+                <h3 data-i18n="event_4_title">The Fall of Persia</h3>
+                <p data-i18n="event_4_desc">Battle of Gaugamela. Babylon surrenders. Darius III flees.</p>
+            </div>
+            <div class="timeline-card">
+                <span class="year">326 BC</span>
+                <h3 data-i18n="event_5_title">India</h3>
+                <p data-i18n="event_5_desc">Battle of the Hydaspes. His troops mutiny, forcing a return.</p>
+            </div>
+            <div class="timeline-card death-card">
+                <span class="year">323 BC</span>
+                <h3 data-i18n="event_6_title">The End</h3>
+                <p data-i18n="event_6_desc">Dies in Babylon at age 32. His empire is divided.</p>
+            </div>
+        </div>
+    </section>
+    <section class="conquests" id="conquests">
+        <h2 data-i18n="conquests_title">The Campaign Map</h2>
+        <div class="gallery-container">
+            <div class="map-display">
+                <img id="map-image" src="alexander1.webp" alt="Map Location" class="map-img">
+                <div class="map-overlay-text">
+                    <h3 id="map-title">Macedonia</h3>
+                    <p id="map-desc">Starting Point</p>
+                </div>
+            </div>
+            <div class="gallery-controls">
+                <button id="prev-map" class="nav-btn">←</button>
+                <div class="dots-container" id="map-dots"></div>
+                <button id="next-map" class="nav-btn">→</button>
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+        <p>
+            © 2026 • <span data-i18n="hero_title">Alexander the Great</span>
+        </p>
+        <p class="footer-small" data-i18n="footer_note">
+            School Project (HTML, CSS, JS)
+        </p>
+        <div class="social-links">
+            <a href="https://github.com/Mo6uL" target="_blank">GitHub</a>
+            <a href="https://www.instagram.com/dayan_btb/" target="_blank">Instagram</a>
+        </div>
+    </footer>
     <script src="main.js"></script>
 </body>
-<footer class="footer">
-    <p>
-        © 2026 • Alexandr Veliký
-    </p>
-    <p class="footer-small">
-        Školní projekt(HTML,CSS,JS)
-    </p>
-</footer>
 
 </html>
-
